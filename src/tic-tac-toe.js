@@ -1,74 +1,61 @@
 class TicTacToe {
     constructor() {
-            this.game = [];
-            for (var i=0; i<3; i++) {
-            this.game[i] = [null, null, null];
-            }
-        this.isFirstPlayer = true;
-        this.remainingTurns = 9;
-
+      this.moveX = true;
+      this.remainSteps = 9;
+      this.gameField = Array.from(Array(3), () => new Array(3));
     }
 
     getCurrentPlayerSymbol() {
-        return this.isFirstPlayer ? 'x' : 'o';
+      return this.moveX ? 'x' : 'o';
     }
 
     nextTurn(rowIndex, columnIndex) {
-    return this.isFirstPlayer ? 'x' : 'o';
-    }
-
-    nextTurn(rowIndex, columnIndex) {
-    if (this.game[rowIndex][columnIndex])
-      return;
-    this.game[rowIndex][columnIndex] = this.getCurrentPlayerSymbol();
-    this.remainingTurns--;
-
-    this.isFirstPlayer = !this.isFirstPlayer;
-
+      if(this.gameField[rowIndex][columnIndex]) return;
+      this.gameField[rowIndex][columnIndex] = this.getCurrentPlayerSymbol();
+      this.moveX = !this.moveX;
+      this.remainSteps--;
     }
 
     isFinished() {
-    return !!(this.isDraw() || this.getWinner());
-
+      return (this.getWinner() ||  this.isDraw() ) ? true : false;
     }
 
     getWinner() {
-        if  (this.game[0][0] !== null &&
-      this.game[0][0] === this.game[1][1] &&
-      this.game[0][0] === this.game[2][2]) {
-      return this.game[0][0];
-    }
-    if (this.game[0][2] !== null &&
-      this.game[0][2] === this.game[1][1] &&
-      this.game[0][2] === this.game[2][0]) {
-      return this.game[0][2];
+      if(this.remainSteps > 4) return null;
+
+      if  (
+        this.gameField[0][0] === this.gameField[1][1] &&
+        this.gameField[0][0] === this.gameField[2][2]) {
+        return this.gameField[0][0];
+      }
+    if (
+      this.gameField[0][2] === this.gameField[1][1] &&
+      this.gameField[0][2] === this.gameField[2][0]) {
+      return this.gameField[0][2];
     }
 
     for (var i=0; i<3; i++) {
-      if (this.game[i][0] && this.game[i][0] === this.game[i][1] && this.game[i][0] === this.game[i][2]) {
-        return this.game[i][0];
+      if (this.gameField[i][0] && this.gameField[i][0] === this.gameField[i][1] && this.gameField[i][0] === this.gameField[i][2]) {
+        return this.gameField[i][0];
       }
-      if (this.game[0][i] && this.game[0][i] === this.game[1][i] && this.game[0][i] === this.game[2][i]) {
-        return this.game[0][i];
+      if (this.gameField[0][i] && this.gameField[0][i] === this.gameField[1][i] && this.gameField[0][i] === this.gameField[2][i]) {
+        return this.gameField[0][i];
       }
     }
     return null;
-
     }
 
     noMoreTurns() {
-    return this.remainingTurns === 0;
-
+      return this.remainSteps === 0;
     }
 
     isDraw() {
-    return !this.getWinner() && this.noMoreTurns();
-
+      if(!this.remainSteps && !this.getWinner()) return true;
+      return false;
     }
 
     getFieldValue(rowIndex, colIndex) {
-    return this.game[rowIndex][colIndex];
-
+      return this.gameField[rowIndex][colIndex] || null;
     }
 }
 
